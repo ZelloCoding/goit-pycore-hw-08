@@ -1,5 +1,6 @@
+import pickle
 from collections import UserDict
-from datetime import datetime, timedelta
+from datetime import datetime
 from record import Record
 from fields import Name
 
@@ -34,3 +35,15 @@ class AddressBook(UserDict):
                     upcoming.append((record.name.value, record.birthday.value))
 
         return upcoming
+
+    # Методи для збереження та завантаження адресної книги
+    def save_to_file(self, filename="addressbook.bin"):
+        with open(filename, "wb") as f:
+            pickle.dump(self.data, f)
+
+    def load_from_file(self, filename="addressbook.bin"):
+        try:
+            with open(filename, "rb") as f:
+                self.data = pickle.load(f)
+        except FileNotFoundError:
+            self.data = {}

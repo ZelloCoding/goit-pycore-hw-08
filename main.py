@@ -16,7 +16,9 @@ def input_error(func):
     return wrapper
 
 
+# Створюємо AddressBook і завантажуємо дані
 address_book = AddressBook()
+address_book.load_from_file()
 
 
 @input_error
@@ -51,7 +53,7 @@ def show_all(args):
     if not address_book.data:
         return "No contacts"
 
-    return "\n".join(str(r) for r in address_book.values())
+    return "\n".join(str(r) for r in address_book.data.values())
 
 
 @input_error
@@ -66,7 +68,9 @@ def add_birthday(args):
 def show_birthday(args):
     name = args[0]
     record = address_book.find(name)
-    return record.birthday.value
+    if record.birthday:
+        return record.birthday.value
+    return "No birthday set"
 
 
 def birthdays(args):
@@ -102,6 +106,8 @@ def main():
         user_input = input(">>> ")
 
         if user_input in ("exit", "close", "good bye"):
+            # Зберігаємо дані перед виходом
+            address_book.save_to_file()
             print("Good bye!")
             break
 
